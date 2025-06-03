@@ -27,6 +27,7 @@
       justify-content: center;
       align-items: center;
       position: relative;
+      width: 100%;
     }
     button {
       font-size: 1.5rem;
@@ -40,11 +41,16 @@
       background-color: #fff0f5;
       color: #ff1493;
       font-weight: bold;
+      position: relative;
+      z-index: 1;
     }
     #noBtn {
       background-color: #ffe4e1;
       color: #ff0000;
-      position: relative;
+      position: absolute;
+      top: 0;
+      left: 160px;
+      z-index: 1;
     }
     .confetti {
       position: absolute;
@@ -71,13 +77,12 @@
   <script>
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
-    const buttons = document.querySelector(".buttons");
 
     document.addEventListener("mousemove", (e) => {
       const btnRect = noBtn.getBoundingClientRect();
       const mouseX = e.clientX;
       const mouseY = e.clientY;
-      const buffer = 100;
+      const buffer = 80;
 
       if (
         mouseX > btnRect.left - buffer &&
@@ -85,10 +90,8 @@
         mouseY > btnRect.top - buffer &&
         mouseY < btnRect.bottom + buffer
       ) {
-        const containerRect = buttons.getBoundingClientRect();
-        const newX = Math.max(0, Math.min(containerRect.width - noBtn.offsetWidth, Math.random() * containerRect.width));
-        const newY = Math.max(0, Math.min(containerRect.height - noBtn.offsetHeight, Math.random() * containerRect.height));
-        noBtn.style.position = "absolute";
+        const newX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+        const newY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
         noBtn.style.left = `${newX}px`;
         noBtn.style.top = `${newY}px`;
       }
@@ -110,5 +113,4 @@
   </script>
 </body>
 </html>
-
 
