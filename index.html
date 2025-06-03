@@ -26,8 +26,6 @@
       gap: 40px;
       justify-content: center;
       align-items: center;
-      width: 100%;
-      position: relative;
     }
     button {
       font-size: 1.5rem;
@@ -45,7 +43,20 @@
     #noBtn {
       background-color: #ffe4e1;
       color: #ff0000;
+      position: relative;
+    }
+    .confetti {
       position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #ff69b4;
+      animation: fall 1s ease-out forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
     }
   </style>
 </head>
@@ -58,23 +69,32 @@
 
   <script>
     const noBtn = document.getElementById("noBtn");
-    const btnWidth = 150;
-    const btnHeight = 60;
+    const container = document.querySelector(".buttons");
+    const body = document.body;
 
-    noBtn.addEventListener("mouseenter", () => {
-      const padding = 20;
-      const maxX = window.innerWidth - btnWidth - padding;
-      const maxY = window.innerHeight - btnHeight - padding;
+    noBtn.addEventListener("mouseover", () => {
+      const containerRect = container.getBoundingClientRect();
+      const maxX = containerRect.width - noBtn.offsetWidth;
+      const maxY = containerRect.height - noBtn.offsetHeight;
 
-      const randomX = Math.floor(Math.random() * maxX);
-      const randomY = Math.floor(Math.random() * maxY);
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
 
-      noBtn.style.left = `${randomX}px`;
-      noBtn.style.top = `${randomY}px`;
+      noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
     });
 
     document.getElementById("yesBtn").addEventListener("click", () => {
       alert("Yay! 💞 Let's go on a date!");
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.left = `${Math.random() * window.innerWidth}px`;
+        confetti.style.top = `0px`;
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+        confetti.style.animationDuration = `${Math.random() * 2 + 1}s`;
+        body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
+      }
     });
   </script>
 </body>
