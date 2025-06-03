@@ -26,6 +26,8 @@
       gap: 40px;
       justify-content: center;
       align-items: center;
+      position: relative;
+      width: 100%;
     }
     button {
       font-size: 1.5rem;
@@ -33,17 +35,20 @@
       border: none;
       border-radius: 15px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: 0.1s;
     }
     #yesBtn {
       background-color: #fff0f5;
       color: #ff1493;
       font-weight: bold;
+      position: relative;
+      z-index: 2;
     }
     #noBtn {
       background-color: #ffe4e1;
       color: #ff0000;
-      position: relative;
+      position: absolute;
+      z-index: 1;
     }
     .confetti {
       position: absolute;
@@ -69,21 +74,28 @@
 
   <script>
     const noBtn = document.getElementById("noBtn");
-    const container = document.querySelector(".buttons");
-    const body = document.body;
+    const yesBtn = document.getElementById("yesBtn");
 
-    noBtn.addEventListener("mouseover", () => {
-      const containerRect = container.getBoundingClientRect();
-      const maxX = containerRect.width - noBtn.offsetWidth;
-      const maxY = containerRect.height - noBtn.offsetHeight;
+    document.addEventListener("mousemove", (e) => {
+      const btnRect = noBtn.getBoundingClientRect();
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      const buffer = 100;
 
-      const randomX = Math.random() * maxX;
-      const randomY = Math.random() * maxY;
-
-      noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+      if (
+        mouseX > btnRect.left - buffer &&
+        mouseX < btnRect.right + buffer &&
+        mouseY > btnRect.top - buffer &&
+        mouseY < btnRect.bottom + buffer
+      ) {
+        const newX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+        const newY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+        noBtn.style.left = `${newX}px`;
+        noBtn.style.top = `${newY}px`;
+      }
     });
 
-    document.getElementById("yesBtn").addEventListener("click", () => {
+    yesBtn.addEventListener("click", () => {
       alert("Yay! 💞 Let's go on a date!");
       for (let i = 0; i < 50; i++) {
         const confetti = document.createElement("div");
@@ -92,11 +104,10 @@
         confetti.style.top = `0px`;
         confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
         confetti.style.animationDuration = `${Math.random() * 2 + 1}s`;
-        body.appendChild(confetti);
+        document.body.appendChild(confetti);
         setTimeout(() => confetti.remove(), 3000);
       }
     });
   </script>
 </body>
 </html>
-
